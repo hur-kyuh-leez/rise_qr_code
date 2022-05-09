@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rise_qr_code/getx/input_field_controller_x.dart';
@@ -6,6 +8,9 @@ import 'package:rise_qr_code/widgets/list_item_widget.dart';
 
 import '../api/api_fetch_product.dart';
 import '../model/list_item.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:date_format/date_format.dart';
 
 class QrScanner extends StatelessWidget {
   static final listKey = GlobalKey<AnimatedListState>();
@@ -116,17 +121,116 @@ class QrScanner extends StatelessWidget {
           child: BarcodeScannerWithController(),
         ),
         Expanded(
-          child: AnimatedList(
-            key: listKey,
-            initialItemCount: items.length,
-            itemBuilder: (context, index, animation) => ListItemWidget(
-              textEditingController: inputFieldControllerX.controllers[index],
-              item: items[index],
-              animation: animation,
-              onClicked: () {
-                removeItemHere(index);
-              },
-            ),
+          child: Column(
+            children: [
+              Expanded(
+                child: AnimatedList(
+                  key: listKey,
+                  initialItemCount: items.length,
+                  itemBuilder: (context, index, animation) => ListItemWidget(
+                    textEditingController:
+                        inputFieldControllerX.controllers[index],
+                    item: items[index],
+                    animation: animation,
+                    onClicked: () {
+                      removeItemHere(index);
+                    },
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.grey[400],
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      onPressed: () async {
+                        // API POST여기다 추가 // 잘된다...!
+                        final response = await http.post(
+                          Uri.parse('http://146.56.37.118/api/receipt'),
+                          headers: <String, String>{
+                            'Content-Type': 'application/json; charset=UTF-8',
+                          },
+                          body: jsonEncode(<String, String>{
+                            "title": "핸드폰에서 함",
+                            "received_date": formatDate(
+                                DateTime.now(), [yyyy, '-', mm, '-', dd]),
+                            "user_id": "1",
+                            "provider_id": "1"
+                          }),
+                        );
+
+                        if (response.statusCode == 201) {
+                          // If the server did return a 201 CREATED response,
+                          // then parse the JSON.
+                          int current_receipt_id = jsonDecode(
+                              response.body.replaceAll(r'[]', r''))['id'];
+                          print(
+                              jsonDecode(response.body.replaceAll(r'[]', r''))[
+                                  'id']); // 임시 방편으로
+
+                          // product 다 add 하기
+                          for(var item in items){
+                            final response2 = await http.post(
+                              Uri.parse('http://146.56.37.118/api/received_product'),
+                              headers: <String, String>{
+                                'Content-Type': 'application/json; charset=UTF-8',
+                              },
+                              body: jsonEncode(<String, String>{
+                                "receipt_id": current_receipt_id.toString(),
+                                "product_id": item.id.toString(),
+                                "stock": item.textEditingController!.text,
+                                "stock_defective": "0"
+                              }),
+                            );
+                            if (response2.statusCode == 201) {
+                              // If the server did return a 201 CREATED response,
+                              // then parse the JSON.
+
+                              print(jsonDecode(response2.body
+                                  .replaceAll(r'[]', r''))); // 임시 방편으로
+                            }
+                          }
+
+                        } else {
+                          // If the server did not return a 201 CREATED response,
+                          // then throw an exception.
+                          // throw Exception('Failed to post.');
+                          print('failed');
+                        }
+
+                        // Get.dialog(
+                        //   AlertDialog(
+                        //     title: const Text('Dialog'),
+                        //     content: const Text('This is a dialog'),
+                        //     actions: [
+                        //       TextButton(
+                        //         child: const Text("Close"),
+                        //         onPressed: () => Get.back(),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // );
+                      },
+                      child: Text(
+                        '추가 하기',
+                        style: TextStyle(height: 1.5, fontSize: 32),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              )
+            ],
           ),
         ),
       ],
