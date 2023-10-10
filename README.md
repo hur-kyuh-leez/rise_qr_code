@@ -1,19 +1,31 @@
-# Flutter Barcode reader connected to Laravel backends
- - This is a MVP for barcoder reader connected to inventory db.
- - backends built with Laravel 
+# Flutter Barcode Reader Connected to Laravel Backends
+
+This project is a Minimum Viable Product (MVP) for a barcode reader integrated with your inventory database, backed by a Laravel backend.
+
 ## Preview
 ![gif](source/rise-qr-code.gif)
-##### Provided under MIT License by Hyuk Kyu Lee.
-*The code is released under the MIT License:*
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+## How to Use
+
+1. **Connect with a Physical Android or iOS Device:** Ensure you have a physical Android or iOS device connected to your development environment.
+
+2. **Allow Developer Mode:** Enable developer mode on your device. You can find instructions on how to do this in the official documentation for your device.
+
+3. **Run the Application:** Use your preferred development environment or IDE to run the application. Make sure to connect it to the physical device you prepared in step 1.
+
+## Backend
+
+The backend for this application is built using Laravel. You can find more details about the backend setup and configuration in the associated Laravel project documentation.
+
+## Contributing
+
+We welcome contributions from the community to improve and enhance this project. Feel free to fork the repository, make changes, and create pull requests.
+
+## Issues and Feedback
+
+If you encounter any issues or have feedback for us, please open an issue in this repository. We appreciate your input and will work to address any problems promptly.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
 
 
-### How to Use...
- 1. connect with a physical android or iOS device.
- 2. allow developer mode
- 3. Run
