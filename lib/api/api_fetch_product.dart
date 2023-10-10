@@ -28,7 +28,8 @@ class ApiFetchProduct extends GetxController {
   Future<bool> fetchProduct(String barcode) async {
 
     final response =
-        await http.get(Uri.parse('http://146.56.37.118/api/product/$barcode'));
+        // await http.get(Uri.parse('http://146.56.37.118/api/product/$barcode'));
+        await http.get(Uri.parse('http://192.168.68.113:8000/api/product/$barcode'));
 
     if (response.statusCode == 200  && response.body.length > 2) {
       // If the server did return a 200 OK response and response body is not '[]' (empty)
